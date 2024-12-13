@@ -1,17 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import HelloWorld from './components/HelloWorld';
-import Button from './components/Button';
-import Input from './components/Input';
+import Button from '../components/Button';
+import Input from '../components/Input';
 
 export default function App() {
   return (
     <View style={styles.container}>
 
       <Image
-        source={require('./assets/logo.png')}
+        source={require('../assets/logo.png')}
         style={styles.logo}
       />
+      <Text>Nyoba Router</Text>
 
       <TextInput
         style={styles.input}

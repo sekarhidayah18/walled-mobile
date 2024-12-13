@@ -2,9 +2,9 @@ import { View, Text } from "react-native";
 
 function HelloWorld() {
     return (
-        <view>
+        <View>
             <Text> Hello HelloWorld</Text>
-        </view>
+        </View>
     );
 }
 
