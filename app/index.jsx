@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import { Link } from 'expo-router';
 
 export default function App() {
   return (
@@ -11,7 +12,6 @@ export default function App() {
         source={require('../assets/logo.png')}
         style={styles.logo}
       />
-      <Text>Nyoba Router</Text>
 
       <TextInput
         style={styles.input}
@@ -27,10 +27,11 @@ export default function App() {
         secureTextEntry={true} //false password akan terlihat
       />
 
-      <Input/>
-      <Button
-        text="Login"
-      />
+      <Button text="Login" />
+
+      <Text style={styles.register}>
+      Don't have account? <Link href="/home" style={styles.here}>Registes Here!</Link>
+      </Text>
 
       <StatusBar style="auto" hidden />
     </View>
@@ -68,4 +69,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
     fontSize: 16,
   },
+  register: {
+    fontSize: 18,
+    marginTop: 15,
+    alignItems: "flex-start"
+  },
+  here: {
+    fontSize: 18,
+    color: "#19918F"
+  }
 });
