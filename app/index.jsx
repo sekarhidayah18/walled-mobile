@@ -27,11 +27,16 @@ export default function App() {
         secureTextEntry={true} //false password akan terlihat
       />
 
-      <Button text="Login" />
+      <Button text="Login" to="/(home)" />
+
 
       <Text style={styles.register}>
-      Don't have account? <Link href="/home" style={styles.here}>Registes Here!</Link>
+        Don't have account? <Link href="/register" style={styles.here}>Register Here!</Link>
       </Text>
+      {/* 
+      <Text style={styles.register}>
+        Ke home <Link href="/home" style={styles.here}>HOME!</Link>
+      </Text> */}
 
       <StatusBar style="auto" hidden />
     </View>

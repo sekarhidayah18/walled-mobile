@@ -13,9 +13,11 @@ export default function Layout() {
         },
       }}>
       {/* Optionally configure static options outside the route.*/}
-      <Stack.Screen name="home" options={{}} />
+      <Stack.Screen name="(home)" options={{headerShown: false}} />
       {/* menghilangkan oren2 di atas */}
+      <Stack.Screen name="register" options = {{headerShown: false}} /> 
       <Stack.Screen name="index" options = {{headerShown: false}} /> 
+      
     </Stack>
   );
 }
