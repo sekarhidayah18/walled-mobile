@@ -1,10 +1,11 @@
 import { Link, Stack } from 'expo-router';
 import { Image, Text, View, StyleSheet, TouchableOpacity, } from 'react-native';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 function LogoTitle() {
   const [isAvatarActive, setIsAvatarActive] = useState(false);
@@ -24,6 +25,29 @@ function LogoTitle() {
 }
 
 export default function Home() {
+  const [user, setUser] = useState({})
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem("token");
+        if (value !== null) {
+          const res = await axios.get(
+            "https://6776-182-3-53-7.ngrok-free.app/profile",
+            {
+              headers: {
+                Authorization: `Bearer ${value}`,
+              },
+            }
+          );
+          const user = res.data.data
+          setUser(user)
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getData();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -31,7 +55,7 @@ export default function Home() {
           <LogoTitle />
           <View>
             <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{user.fullname}</Text>
-            <Text style={{ fontSize: 18 }}>{user.typeofaccount}</Text>
+            <Text style={{ fontSize: 18 }}>Personal Account</Text>
           </View>
         </View>
         <Image source={require('../../assets/littlesun.png')} />
@@ -39,7 +63,7 @@ export default function Home() {
       <View style={{ paddingHorizontal: 23, paddingVertical: 12, marginTop: 5 }}>
         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingTop: 25, justifyContent: 'space-between' }}>
           <View style={{ width: '70%' }}>
-            <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Good Morning, {user.fullname.split(' ')[0]}!</Text>
+            <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Good Morning, {user.fullname}!</Text>
             <Text style={{ fontSize: 18 }}>Check all your incoming and outgoing transactions here</Text>
           </View>
           <Image source={require('../../assets/sun.png')} style={{ width: 81, height: 77 }} />
@@ -148,9 +172,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     borderRadius: 10,
-    width:397,
+    width: 397,
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -1,12 +1,11 @@
 import { router } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-function Button({ bgColor = "#19918F", text, to }) {
+function Button({ bgColor = "#19918F", text, onPress = () => {} }) {
     return (
-        <TouchableOpacity style={{ ...styles.button, backgroundColor: bgColor }}
-            onPress={() => {
-                router.replace(to)
-            }}
+        <TouchableOpacity 
+        onPress={onPress}
+        style={{ ...styles.button, backgroundColor: bgColor }}
         >
             <Text style={styles.buttonText}>{text}</Text>
         </TouchableOpacity>
