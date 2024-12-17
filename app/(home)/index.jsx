@@ -18,13 +18,14 @@ function LogoTitle() {
       onPress={() => setIsAvatarActive((prev) => !prev)}
       activeOpacity={0.8}
     >
-      <Image style={styles.image} source={require('../../assets/avatar.png')} />
+      <Image style={styles.image} source={user?.avatar_url} />
     </TouchableOpacity >
 
   );
 }
 
 export default function Home() {
+  const [showBalance, setShowBalance] = useState(true);
   const [user, setUser] = useState({})
   useEffect(() => {
     const getData = async () => {
@@ -32,7 +33,7 @@ export default function Home() {
         const value = await AsyncStorage.getItem("token");
         if (value !== null) {
           const res = await axios.get(
-            "https://6776-182-3-53-7.ngrok-free.app/profile",
+            "https://walled-api.vercel.app/profile",
             {
               headers: {
                 Authorization: `Bearer ${value}`,
@@ -60,10 +61,10 @@ export default function Home() {
         </View>
         <Image source={require('../../assets/littlesun.png')} />
       </View>
-      <View style={{ paddingHorizontal: 23, paddingVertical: 12, marginTop: 5 }}>
+      <View style={{ paddingHorizontal: 23, paddingVertical: 12,}}>
         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingTop: 25, justifyContent: 'space-between' }}>
           <View style={{ width: '70%' }}>
-            <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Good Morning, {user.fullname}!</Text>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Good Morning, {user.fullname}!</Text>
             <Text style={{ fontSize: 18 }}>Check all your incoming and outgoing transactions here</Text>
           </View>
           <Image source={require('../../assets/sun.png')} style={{ width: 81, height: 77 }} />
@@ -72,14 +73,23 @@ export default function Home() {
 
       <View style={styles.accountnumber}>
         <Text style={{ color: '#fff', fontSize: 18 }}>Account No.</Text>
-        <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>{user.accountnumber}</Text>
+        <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>{user.wallet?.account_number}</Text>
       </View>
 
       <View style={styles.balancebox}>
 
         <View>
           <Text style={{ color: 'black', fontSize: 18 }}>Balance</Text>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Rp {user.balance}</Text>
+          <View style={{ gap: 2 }}>
+            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
+              {showBalance
+                ? `Rp${user.wallet?.balance?.toLocaleString("id-ID")}`
+                : "Rp ****"}
+              <TouchableOpacity onPress={() => setShowBalance((prev) => !prev)}>
+                <Image source={require('../../assets/view.png')} style={{ width: 18, height: 18, marginLeft: 10 }} />
+              </TouchableOpacity>
+            </Text>
+          </View>
         </View>
 
         <View>
@@ -92,7 +102,10 @@ export default function Home() {
             </TouchableOpacity>
           </View>
         </View>
+      </View>
 
+      <View style={styles.transbox}>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', textAlign: 'left' }}>Transaction History</Text>
       </View>
 
       <StatusBar style="auto" hidden />
@@ -138,7 +151,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 23,
     paddingBottom: 12,
     paddingTop: 15,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    marginBottom:0,
   },
   container: {
     flex: 1,
@@ -163,11 +177,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#19918F',
-    marginTop: 30,
-    marginBottom: 30,
+    marginVertical: 15,
     borderRadius: 10,
   },
   balancebox: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    padding: 12,
+    borderRadius: 10,
+    width: 397,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    marginBottom: 15,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  transbox: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     padding: 12,

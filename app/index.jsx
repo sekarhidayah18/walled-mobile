@@ -35,7 +35,7 @@ export default function App() {
       LoginSchema.parse(form); //* setelah di validasi emailnya 
       // console.log("masikkkkkk")
 
-      const res = await axios.post("https://6776-182-3-53-7.ngrok-free.app/auth/login", form);
+      const res = await axios.post("https://walled-api.vercel.app/auth/login", form);
       console.log(res.data.data.token, "ini budi")
       await AsyncStorage.setItem("token", res.data.data.token);
       router.replace("/(home)")
@@ -97,10 +97,10 @@ export default function App() {
       <Text style={styles.register}>
         Don't have account? <Link href="/register" style={styles.here}>Register Here!</Link>
       </Text>
-      {/* 
+      
       <Text style={styles.register}>
-        Ke home <Link href="/home" style={styles.here}>HOME!</Link>
-      </Text> */}
+        Ke home <Link href="/(home)" style={styles.here}>HOME!</Link>
+      </Text>
 
       <StatusBar style="auto" hidden />
     </View>

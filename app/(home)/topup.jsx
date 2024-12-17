@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     currency: {
-        fontSize: 16,
+        fontSize: 18,
+        paddingBottom:0
     },
     superscript: {
         fontSize: 10,
@@ -102,6 +103,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         fontSize: 30,
         width: '100%',
+        paddingBottom:0,
+        paddingTop:0,
+        paddingLeft:33
     },
     inputnote: {
         fontSize: 16,

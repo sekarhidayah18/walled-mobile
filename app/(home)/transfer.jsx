@@ -18,7 +18,12 @@ function Transfer() {
         <View style={{ alignItems: 'center', flex: 1, justifyContent: "space-between" }}>
             <View style={{ alignItems: 'center', width: '100%' }}>
                 <View style={styles.to}>
-                    <Text style={{ fontSize: 16, color: '#fff' }}>To:   9000008940208</Text>
+                    <Text style={{ fontSize: 16, color: '#fff', lineHeight: 15, paddingBottom:0 }}>To:   </Text>
+                    <TextInput
+                        style={styles.transnumber}
+                        keyboardType='numeric'
+                    />
+
                 </View>
 
                 <View style={styles.container}>
@@ -81,8 +86,18 @@ const styles = StyleSheet.create({
         color: "#B3b3b3",
         fontSize: 16,
     },
-    currency: {
+    transnumber: {
         fontSize: 16,
+        color: 'white',
+        borderBottomColor: "#B3B3B3",
+        borderBottomWidth: 0.5,
+        width: '100%',
+        paddingVertical:0,
+        paddingLeft:25
+    },
+    currency: {
+        fontSize: 18,
+        paddingBottom:0
     },
     superscript: {
         fontSize: 10,
@@ -94,6 +109,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         fontSize: 30,
         width: '100%',
+        paddingBottom:0,
+        paddingTop:0,
+        paddingLeft:33
     },
     inputnote: {
         fontSize: 16,
@@ -108,7 +126,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#19918F',
         borderRadius: 10,
-        marginBottom:15,
+        marginBottom: 15,
     },
 });
 

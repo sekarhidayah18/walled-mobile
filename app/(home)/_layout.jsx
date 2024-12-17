@@ -11,13 +11,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="transfer"
-        options={{
-          title: 'Transfer',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="send" color={color} />,
-        }}
-      />
+
       <Tabs.Screen
         name="topup"
         options={{
@@ -25,6 +19,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="upload" color={color} />,
         }}
       />
+
+      <Tabs.Screen
+        name="transfer"
+        options={{
+          title: 'Transfer',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="send" color={color} />,
+        }}
+      />
+
     </Tabs>
   );
 }
