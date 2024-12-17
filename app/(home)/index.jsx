@@ -1,5 +1,5 @@
 import { Link, Stack } from 'expo-router';
-import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, } from 'react-native';
+import { Image, Text, View, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, FlatList } from 'react-native';
 import React, { useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
