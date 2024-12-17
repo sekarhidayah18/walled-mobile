@@ -7,18 +7,21 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-function LogoTitle() {
+function LogoTitle({ avatar }) {
   const [isAvatarActive, setIsAvatarActive] = useState(false);
+
   return (
     <TouchableOpacity
       style={[
         styles.avatarContainer,
-        { borderColor: setIsAvatarActive ? '#178F8D' : '#fafbfd' },
+        { borderColor: isAvatarActive ? '#4cc4c2' : '#19918F' },
       ]}
       onPress={() => setIsAvatarActive((prev) => !prev)}
       activeOpacity={0.8}
     >
-      <Image style={styles.image} source={user?.avatar_url} />
+      {/* Konten di dalam TouchableOpacity, misalnya gambar */}
+     
+      <Image style={styles.image} source={{ uri: avatar }} />
     </TouchableOpacity >
 
   );
@@ -41,6 +44,7 @@ export default function Home() {
             }
           );
           const user = res.data.data
+          console.log(user, "....")
           setUser(user)
         }
       } catch (e) {
@@ -53,7 +57,7 @@ export default function Home() {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-          <LogoTitle />
+          <LogoTitle avatar={user?.avatar_url} />
           <View>
             <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{user.fullname}</Text>
             <Text style={{ fontSize: 18 }}>Personal Account</Text>
@@ -61,13 +65,13 @@ export default function Home() {
         </View>
         <Image source={require('../../assets/littlesun.png')} />
       </View>
-      <View style={{ paddingHorizontal: 23, paddingVertical: 12,}}>
+      <View style={{ paddingHorizontal: 23, paddingVertical: 12, }}>
         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingTop: 25, justifyContent: 'space-between' }}>
           <View style={{ width: '70%' }}>
             <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 8 }}>Good Morning, {user.fullname}!</Text>
             <Text style={{ fontSize: 18 }}>Check all your incoming and outgoing transactions here</Text>
           </View>
-          <Image source={require('../../assets/sun.png')} style={{ width: 81, height: 77 }} />
+          <Image source={require('../../assets/sun.png')} style={{ width: 90, height: 86 }} />
         </View>
       </View>
 
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     paddingTop: 15,
     backgroundColor: '#fff',
-    marginBottom:0,
+    marginBottom: 0,
   },
   container: {
     flex: 1,
@@ -162,12 +166,14 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     width: 50,
     height: 50,
+    alignItems: 'center',
   },
   avatarContainer: {
     borderRadius: 9999, // Full circle
     borderWidth: 6,
     cursor: "pointer", // Optional for web
     transition: "all 0.3s", // Optional for web
+    alignItems: 'center',
   },
   accountnumber: {
     paddingHorizontal: 20,
