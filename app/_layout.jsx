@@ -14,6 +14,8 @@ export default function Layout() {
       {/* menghilangkan oren2 di atas */}
       <Stack.Screen name="register" options = {{headerShown: false}} /> 
       <Stack.Screen name="index" options = {{headerShown: false}} /> 
+      <Stack.Screen name="topup" options = {{headerShown: false}} /> 
+      <Stack.Screen name="transfer" options = {{headerShown: false}} /> 
       <Stack.Screen name="tnc" options = {{presentation: "modal", title: "Term and Conditions"}} /> 
     </Stack>
   );

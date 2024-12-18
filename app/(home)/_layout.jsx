@@ -1,5 +1,7 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function TabLayout() {
   return (
@@ -8,7 +10,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home', headerShown: false,
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={24} color={color} />,
         }}
       />
 
@@ -16,7 +18,7 @@ export default function TabLayout() {
         name="topup"
         options={{
           title: 'Top Up',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="upload" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome5 name="plus-square" size={24} color={color} />,
         }}
       />
 
@@ -24,7 +26,7 @@ export default function TabLayout() {
         name="transfer"
         options={{
           title: 'Transfer',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="send" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="bank-transfer" size={33} color={color} />,
         }}
       />
 

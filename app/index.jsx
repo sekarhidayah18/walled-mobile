@@ -36,7 +36,7 @@ export default function App() {
       // console.log("masikkkkkk")
 
       const res = await axios.post("https://walled-api.vercel.app/auth/login", form);
-      console.log(res.data.data.token, "ini budi")
+      // console.log(res.data.data.token, "ini budi")
       await AsyncStorage.setItem("token", res.data.data.token);
       router.replace("/(home)")
     } catch (err) {
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     paddingHorizontal: 10,
-    marginBottom: 15,
+    marginTop: 15,
     backgroundColor: '#f9f9f9',
     fontSize: 16,
   },
@@ -153,5 +153,6 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "left",
     marginBottom: 5,
-  }
+  },
+
 });

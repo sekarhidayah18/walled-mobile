@@ -31,6 +31,7 @@ function LogoTitle({ avatar }) {
 export default function Home() {
   const [showBalance, setShowBalance] = useState(true);
   const [user, setUser] = useState({})
+  const [showAmount, setShowAmount] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -46,11 +47,11 @@ export default function Home() {
             }
           );
           const user = res.data.data
-          console.log(user, "....")
+          // console.log(user, "....")
           setUser(user)
         }
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     getData();
@@ -77,7 +78,7 @@ export default function Home() {
           setUser(user)
         }
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     getData();
@@ -101,11 +102,11 @@ export default function Home() {
             }
           );
           const transactions = res.data.data
-          console.log(transactions, "sekar")
+          // console.log(transactions, "sekar")
           setTransactions(transactions)
         }
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     getData();
@@ -152,10 +153,13 @@ export default function Home() {
             <View style={{ gap: 2 }}>
               <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
                 {showBalance
-                  ?
-                  `Rp${user?.wallet?.balance
-                    ? user?.wallet?.balance.toLocaleString("id-ID", { minimumFractionDigits: 0 })
-                    : "0"}`
+                  ? Intl.NumberFormat(
+                    'id-ID',
+                    {
+                      style: 'currency',
+                      currency: 'IDR',
+                    }
+                  ).format(user.wallet?.balance || 0)
                   : "Rp ****"}
                 <TouchableOpacity onPress={() => setShowBalance((prev) => !prev)}>
                   <Image source={require('../../assets/view.png')} style={{ width: 18, height: 18, marginLeft: 10 }} />
@@ -166,34 +170,61 @@ export default function Home() {
 
           <View>
             <View style={{ gap: 20, alignContent: 'flex-end' }}>
+
+
               <TouchableOpacity style={{ width: 40, height: 40, backgroundColor: '#19918F', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                <FontAwesome6 size={18} name="add" color={'#fff'} />
+                <Link href="/topup">
+                  <FontAwesome6 size={18} name="add" color={'#fff'} />
+                </Link>
               </TouchableOpacity>
+
+
               <TouchableOpacity style={{ width: 40, height: 40, backgroundColor: '#19918F', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                <FontAwesome size={18} name="send" color={'#fff'} />
+                <Link href="/transfer">
+                  <FontAwesome size={18} name="send" color={'#fff'} />
+                </Link>
               </TouchableOpacity>
+
             </View>
           </View>
         </View>
 
         <View style={styles.transbox}>
-          <Text style={{ fontSize: 22, fontWeight: 'bold', textAlign: 'left' }}>Transaction History</Text>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', textAlign: 'left', color: '#19918f' }}>Transaction History</Text>
         </View>
+
         <ScrollView>
           <View style={styles.translist}>
             {transactions?.map((transaction) => {
               return (
-                <View style={styles.datatrans}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                    <View>
-                      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{transactions.fullname}</Text>
-                      <Text style={{ fontSize: 16 }}>{transaction.transaction_type}</Text>
-                      <Text style={{ fontSize: 16 }}>{transaction.transaction_date}</Text>
-                      <Text style={{ fontSize: 16, color:'black' }}>{transaction.description}</Text>
-                    </View>
+                <View key={transaction.id} style={styles.datatrans}>
+                  <View>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{transaction.recipient_fullname}</Text>
+                    <Text style={{ fontSize: 16, color: 'black' }}>{transaction.description}</Text>
+                    <Text style={{ fontSize: 16, color: '#b3b3b3' }}>{new Intl.DateTimeFormat('id-ID', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: false, // Format 24 jam (non-AM/PM)
+                    }).format(new Date(transaction.transaction_date))} </Text>
                   </View>
                   <View>
-                    <Text style={{ fontSize: 16 }}>{transaction.amount}</Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: transaction.recipient_id == user.id ? 'green' : 'red',
+                      }}
+                    >
+                      {transaction.recipient_id == user.id ? '+' : '-'}
+                      {Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 2,
+                      }).format(transaction.amount)}
+                    </Text>
                   </View>
                 </View>
               )
@@ -243,6 +274,17 @@ const styles = StyleSheet.create({
     transition: "all 0.3s", // Optional for web
     alignItems: 'center',
   },
+  datatrans: {
+    paddingHorizontal: 20,
+    paddingVertical: 3,
+    flexDirection: 'row',
+    width: 397,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderTopColor: '#b3b3b3',
+    borderTopWidth: 0.1,
+  },
   accountnumber: {
     paddingHorizontal: 20,
     paddingVertical: 12,
@@ -277,11 +319,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     padding: 12,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     width: 397,
     justifyContent: 'space-between',
     alignItems: 'center',
     shadowColor: '#000',
+    borderBottomColor: '#b3b3b3',
+    borderBottomWidth: 0.5,
     shadowOffset: {
       width: 0,
       height: 2,

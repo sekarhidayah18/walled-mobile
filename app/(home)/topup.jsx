@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 function Topup() {
 
     const [value, setValue] = useState('');
+    const [note, setNote] = useState('');
 
     // Fungsi untuk menambahkan titik setiap ribuan
     const formatNumber = (text) => {
@@ -12,14 +13,49 @@ function Topup() {
         return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik setiap ribuan
     };
 
+    // Fungsi untuk menangani perubahan input
     const handleInputChange = (text) => {
         const formattedValue = formatNumber(text);
         setValue(formattedValue);
     };
+    // fungsi untuk menangani aksi saat botton Topup ditekan
+    const handleTopUp = async () => {
+        if (!value || !note) {
+            Alert.alert('Error', 'Please fill in both amount and notes');
+            return;
+        }
+
+        const transactionData = {
+            amount: value,
+            description: NativeModules,
+        };
+
+        try {
+            const response = await fetch('https://walled-api.vercel.app/transactions/topup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(transactionData),
+            });
+            // memeriksa respon API
+            const result = await response.json();
+            if (response.ok) {
+                Alert.alert('Success', 'Transaction succesful!');
+                console.log(result);
+            } else {
+                Alert.alert('Error', 'Transaction failed');
+                console.error(result);
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Failed to perform the transaction');
+            console.error(error);
+        }
+    };
 
     return (
         <View style={{ alignItems: 'center', flex: 1, justifyContent: "space-between" }}>
-            <View style={{ alignItems: 'center', width: '100%'}}>
+            <View style={{ alignItems: 'center', width: '100%' }}>
                 <View style={styles.container}>
                     <Text style={styles.placeholder}>Amount</Text>
                     <Text style={styles.currency}>
@@ -48,11 +84,15 @@ function Topup() {
 
                 <View style={styles.notebox}>
                     <Text style={styles.placeholder}>Notes</Text>
-                    <TextInput style={styles.inputnote} />
+                    <TextInput
+                        style={styles.inputnote}
+                        value={note}
+                        onChangeText={setNote}
+                    />
                 </View>
             </View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleTopUp}>
                 <View style={styles.buttontopup}>
                     <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18, }}>Top Up</Text>
                 </View>
@@ -91,7 +131,7 @@ const styles = StyleSheet.create({
     },
     currency: {
         fontSize: 18,
-        paddingBottom:0
+        paddingBottom: 0
     },
     superscript: {
         fontSize: 10,
@@ -103,9 +143,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         fontSize: 30,
         width: '100%',
-        paddingBottom:0,
-        paddingTop:0,
-        paddingLeft:33
+        paddingBottom: 0,
+        paddingTop: 0,
+        paddingLeft: 33
     },
     inputnote: {
         fontSize: 16,
@@ -120,7 +160,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#19918F',
         borderRadius: 10,
-        marginBottom:15,
+        marginBottom: 15,
     },
 });
 
