@@ -10,15 +10,16 @@ function Topup() {
     const [note, setNote] = useState('');
 
     // Fungsi untuk menambahkan titik setiap ribuan
-    const formatNumber = (text) => {
-        const cleaned = text.replace(/\D/g, ''); // Menghapus karakter non-digit
-        return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik setiap ribuan
-    };
+    // const formatNumber = (text) => {
+    //     const cleaned = text.replace(/\D/g, ''); // Menghapus karakter non-digit
+    //     return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik setiap ribuan
+    // };
 
     // Fungsi untuk menangani perubahan input
     const handleInputChange = (text) => {
-        const formattedValue = formatNumber(text);
-        setValue(formattedValue);
+        // const formattedValue = formatNumber(text);
+        // setValue(formattedValue);
+        setValue(text);
     };
     // fungsi untuk menangani aksi saat botton Topup ditekan
     const handleTopUp = async () => {
@@ -31,7 +32,7 @@ function Topup() {
         try {
             const token = await AsyncStorage.getItem('token');
             if (token) {
-                console.log(token, 'token');
+                // console.log(token, 'token');
                 try {
                     console.log('topup!', value, note)
                     const response = await axios.post('https://walled-api.vercel.app/transactions/topup', {
@@ -64,7 +65,8 @@ function Topup() {
         } catch (error) {
             console.log(error, 'gagal mengambil token!')
         }
-
+        setValue('');
+            setNote('');
     };
 
     return (

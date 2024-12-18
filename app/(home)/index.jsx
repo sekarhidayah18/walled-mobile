@@ -81,7 +81,28 @@ export default function Home() {
         // console.log(e);
       }
     };
+    const getDataTransactions = async () => {
+      try {
+        const value = await AsyncStorage.getItem("token");
+        if (value !== null) {
+          const res = await axios.get(
+            "https://walled-api.vercel.app/transactions",
+            {
+              headers: {
+                Authorization: `Bearer ${value}`,
+              },
+            }
+          );
+          const transactions = res.data.data
+          // console.log(transactions, "sekar")
+          setTransactions(transactions)
+        }
+      } catch (e) {
+        // console.log(e);
+      }
+    };
     getData();
+    getDataTransactions();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -196,41 +217,41 @@ export default function Home() {
         <ScrollView>
           <View style={styles.translist}>
             {transactions
-            ?.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date))
-            .map((transaction) => {
-              return (
-                <View key={transaction.id} style={styles.datatrans}>
-                  <View>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{transaction.recipient_fullname}</Text>
-                    <Text style={{ fontSize: 16, color: 'black' }}>{transaction.description}</Text>
-                    <Text style={{ fontSize: 16, color: '#b3b3b3' }}>{new Intl.DateTimeFormat('id-ID', {
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: false, // Format 24 jam (non-AM/PM)
-                    }).format(new Date(transaction.transaction_date))} </Text>
+              ?.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date))
+              .map((transaction) => {
+                return (
+                  <View key={transaction.id} style={styles.datatrans}>
+                    <View>
+                      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{transaction.recipient_fullname}</Text>
+                      <Text style={{ fontSize: 16, color: 'black' }}>{transaction.description}</Text>
+                      <Text style={{ fontSize: 16, color: '#b3b3b3' }}>{new Intl.DateTimeFormat('id-ID', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false, // Format 24 jam (non-AM/PM)
+                      }).format(new Date(transaction.transaction_date))} </Text>
+                    </View>
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: user.id === transaction.recipient_wallet_id || transaction.transaction_type === "top-up" ? 'green' : 'red',
+                        }}
+                      >
+                        {transaction.recipient_wallet_id === user.id || transaction.transaction_type === "top-up" ? '+' : '-'}
+                        {Intl.NumberFormat('id-ID', {
+                          style: 'currency',
+                          currency: 'IDR',
+                          minimumFractionDigits: 2,
+                        }).format(transaction.amount)}
+                      </Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        color: user.id === transaction.recipient_wallet_id || transaction.transaction_type === "top-up" ? 'green' : 'red',
-                      }}
-                    >
-                      {transaction.recipient_wallet_id === user.id || transaction.transaction_type === "top-up" ? '+' : '-'}
-                      {Intl.NumberFormat('id-ID', {
-                        style: 'currency',
-                        currency: 'IDR',
-                        minimumFractionDigits: 2,
-                      }).format(transaction.amount)}
-                    </Text>
-                  </View>
-                </View>
-              )
-            })}
+                )
+              })}
 
           </View>
         </ScrollView>

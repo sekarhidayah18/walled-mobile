@@ -1,8 +1,14 @@
 import { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function Transfer() {
+
     const [value, setValue] = useState('');
+    const [note, setNote] = useState('');
+    const [norek, setNorek] = useState('');
 
     // Fungsi untuk menambahkan titik setiap ribuan
     const formatNumber = (text) => {
@@ -10,9 +16,59 @@ function Transfer() {
         return cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik setiap ribuan
     };
 
+    // Fungsi untuk menangani perubahan input
     const handleInputChange = (text) => {
-        const formattedValue = formatNumber(text);
-        setValue(formattedValue);
+        // const formattedValue = formatNumber(text);
+        setValue(text);
+    };
+    // fungsi untuk menangani aksi saat botton Topup ditekan
+    const handleTrans = async () => {
+        if (!norek || !value || !note) {
+            Alert.alert('Error', 'Please fill in both amount and notes');
+            return;
+        }
+
+
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (token) {
+                // console.log(token, 'token');
+                try {
+                    // console.log('topup!', value, note)
+                    const response = await axios.post('https://walled-api.vercel.app/transactions/transfer', {
+                        to: norek,
+                        amount: value,
+                        description: note,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    // if (response.status === 200) {
+                    //     console.log(response, "hasil response")
+                    // }
+                    // else {
+                    //     console.log('gagal!')
+                    // }
+                    // memeriksa respon API
+                    if (response.status === 201) {
+                        Alert.alert('Success', 'Transaction succesful!');
+                        // console.log(result);
+                    } else {
+                        Alert.alert('Error', 'Transaction failed');
+                        console.log(response);
+                    }
+                } catch (error) {
+                    Alert.alert('Error', 'Failed to perform the transaction');
+                    console.log(error);
+                }
+            }
+        } catch (error) {
+            console.log(error, 'gagal mengambil token!')
+        }
+setNorek('');
+setValue('');
+setNote('');
     };
     return (
         <View style={{ alignItems: 'center', flex: 1, justifyContent: "space-between" }}>
