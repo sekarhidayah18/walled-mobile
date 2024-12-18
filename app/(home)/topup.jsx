@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 function Topup() {
 
@@ -25,32 +27,44 @@ function Topup() {
             return;
         }
 
-        const transactionData = {
-            amount: value,
-            description: NativeModules,
-        };
 
         try {
-            const response = await fetch('https://walled-api.vercel.app/transactions/topup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(transactionData),
-            });
-            // memeriksa respon API
-            const result = await response.json();
-            if (response.ok) {
-                Alert.alert('Success', 'Transaction succesful!');
-                console.log(result);
-            } else {
-                Alert.alert('Error', 'Transaction failed');
-                console.error(result);
+            const token = await AsyncStorage.getItem('token');
+            if (token) {
+                console.log(token, 'token');
+                try {
+                    console.log('topup!', value, note)
+                    const response = await axios.post('https://walled-api.vercel.app/transactions/topup', {
+                        amount: value,
+                        description: note,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    // if (response.status === 200) {
+                    //     console.log(response, "hasil response")
+                    // }
+                    // else {
+                    //     console.log('gagal!')
+                    // }
+                    // memeriksa respon API
+                    if (response.status === 201) {
+                        Alert.alert('Success', 'Transaction succesful!');
+                        // console.log(result);
+                    } else {
+                        Alert.alert('Error', 'Transaction failed');
+                        console.log(response);
+                    }
+                } catch (error) {
+                    Alert.alert('Error', 'Failed to perform the transaction');
+                    console.log(error);
+                }
             }
         } catch (error) {
-            Alert.alert('Error', 'Failed to perform the transaction');
-            console.error(error);
+            console.log(error, 'gagal mengambil token!')
         }
+
     };
 
     return (

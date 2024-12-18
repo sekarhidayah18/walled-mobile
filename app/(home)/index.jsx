@@ -195,7 +195,9 @@ export default function Home() {
 
         <ScrollView>
           <View style={styles.translist}>
-            {transactions?.map((transaction) => {
+            {transactions
+            ?.sort((a, b) => new Date(b.transaction_date) - new Date(a.transaction_date))
+            .map((transaction) => {
               return (
                 <View key={transaction.id} style={styles.datatrans}>
                   <View>
@@ -215,10 +217,10 @@ export default function Home() {
                     <Text
                       style={{
                         fontSize: 20,
-                        color: transaction.recipient_id == user.id ? 'green' : 'red',
+                        color: user.id === transaction.recipient_wallet_id || transaction.transaction_type === "top-up" ? 'green' : 'red',
                       }}
                     >
-                      {transaction.recipient_id == user.id ? '+' : '-'}
+                      {transaction.recipient_wallet_id === user.id || transaction.transaction_type === "top-up" ? '+' : '-'}
                       {Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: 'IDR',
